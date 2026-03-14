@@ -1,0 +1,6 @@
+app:
+  auth:
+    jwt:
+      issuer: http://localhost:8080
+      secret: test-secret-key-for-beauty-platform-12345
+      access-token-ttl: 60m
