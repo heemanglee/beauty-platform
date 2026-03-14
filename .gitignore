@@ -1,4 +1,5 @@
 HELP.md
+skills-lock.json
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -38,3 +39,9 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### SKILL.md
+.agents
+
+### Docs
+docs
