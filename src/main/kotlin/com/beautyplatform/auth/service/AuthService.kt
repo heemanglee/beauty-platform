@@ -1,5 +1,12 @@
-package com.beautyplatform.auth
+package com.beautyplatform.auth.service
 
+import com.beautyplatform.auth.dto.AuthTokenResponse
+import com.beautyplatform.auth.dto.AuthenticatedUser
+import com.beautyplatform.auth.dto.LoginRequest
+import com.beautyplatform.auth.dto.SignupRequest
+import com.beautyplatform.auth.exception.EmailAlreadyExistsException
+import com.beautyplatform.auth.exception.InvalidCredentialsException
+import com.beautyplatform.auth.exception.PhoneNumberAlreadyExistsException
 import com.beautyplatform.common.security.JwtTokenService
 import com.beautyplatform.user.EmailNormalizer
 import com.beautyplatform.user.User
@@ -76,7 +83,7 @@ class AuthService(
     }
 }
 
-fun User.toAuthenticatedUser(): AuthenticatedUser =
+private fun User.toAuthenticatedUser(): AuthenticatedUser =
     AuthenticatedUser(
         id = requireNotNull(id),
         name = name,

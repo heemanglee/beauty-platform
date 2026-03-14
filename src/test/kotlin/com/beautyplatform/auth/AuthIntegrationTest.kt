@@ -1,5 +1,9 @@
 package com.beautyplatform.auth
 
+import com.beautyplatform.auth.dto.AuthTokenResponse
+import com.beautyplatform.auth.dto.AuthenticatedUser
+import com.beautyplatform.auth.dto.LoginRequest
+import com.beautyplatform.auth.dto.SignupRequest
 import com.beautyplatform.common.security.SecurityTestProbeConfiguration
 import com.beautyplatform.user.User
 import com.beautyplatform.user.UserRepository

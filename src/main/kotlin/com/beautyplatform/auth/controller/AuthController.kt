@@ -1,5 +1,10 @@
-package com.beautyplatform.auth
+package com.beautyplatform.auth.controller
 
+import com.beautyplatform.auth.dto.AuthTokenResponse
+import com.beautyplatform.auth.dto.AuthenticatedUser
+import com.beautyplatform.auth.dto.LoginRequest
+import com.beautyplatform.auth.dto.SignupRequest
+import com.beautyplatform.auth.service.AuthService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

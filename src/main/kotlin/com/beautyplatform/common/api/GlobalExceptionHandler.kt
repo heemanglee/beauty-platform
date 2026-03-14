@@ -1,8 +1,8 @@
 package com.beautyplatform.common.api
 
-import com.beautyplatform.auth.EmailAlreadyExistsException
-import com.beautyplatform.auth.InvalidCredentialsException
-import com.beautyplatform.auth.PhoneNumberAlreadyExistsException
+import com.beautyplatform.auth.exception.EmailAlreadyExistsException
+import com.beautyplatform.auth.exception.InvalidCredentialsException
+import com.beautyplatform.auth.exception.PhoneNumberAlreadyExistsException
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

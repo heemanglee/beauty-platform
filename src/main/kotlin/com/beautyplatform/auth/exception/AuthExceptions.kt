@@ -1,4 +1,4 @@
-package com.beautyplatform.auth
+package com.beautyplatform.auth.exception
 
 class EmailAlreadyExistsException(
     email: String,

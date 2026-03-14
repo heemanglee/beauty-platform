@@ -1,4 +1,4 @@
-package com.beautyplatform.auth
+package com.beautyplatform.auth.dto
 
 import com.beautyplatform.user.UserRole
 import jakarta.validation.constraints.Email

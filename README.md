@@ -31,6 +31,16 @@ Java 21 is configured through the Gradle toolchain.
 - MySQL Connector/J
 - Spring OAuth2 Resource Server
 
+## Package Structure
+
+This project uses top-level feature/domain packages such as `auth`, `user`, and `common`.
+
+- `common` is a cross-cutting area and may be split by responsibility, such as `common.api` and `common.security`.
+- Domain packages stay flat by default and are split into nested role-based packages only when the domain grows enough to justify it.
+- `auth` is currently split into `controller`, `service`, `dto`, and `exception`; `user` remains flat for now.
+
+See [docs/package-structure.md](docs/package-structure.md) for the packaging guideline.
+
 ## Local Run
 
 Local development defaults to the `local` profile and expects MySQL on `localhost:3306`.
