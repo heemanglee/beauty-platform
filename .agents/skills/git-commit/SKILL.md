@@ -109,6 +109,7 @@ EOF
 
 ## Best Practices
 
+- Split changes into separate commits by logical work unit. Do not create a single commit when the changes naturally group into distinct tasks such as runtime configuration, feature implementation, tests, or documentation.
 - One logical change per commit
 - Present tense: "add" not "added"
 - Imperative mood: "fix bug" not "fixes bug"
