@@ -1,4 +1,4 @@
-package com.beautyplatform.m2
+package com.beautyplatform.admin
 
 import com.beautyplatform.auth.dto.AuthTokenResponse
 import com.beautyplatform.auth.dto.LoginRequest
