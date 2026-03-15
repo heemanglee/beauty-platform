@@ -5,6 +5,7 @@ import com.beautyplatform.auth.dto.AuthenticatedUser
 import com.beautyplatform.auth.dto.LoginRequest
 import com.beautyplatform.auth.dto.SignupRequest
 import com.beautyplatform.common.security.SecurityTestProbeConfiguration
+import com.beautyplatform.product.ProductImageStorageTestConfiguration
 import com.beautyplatform.user.User
 import com.beautyplatform.user.UserRepository
 import com.beautyplatform.user.UserRole
@@ -34,7 +35,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Import(SecurityTestProbeConfiguration::class)
+@Import(SecurityTestProbeConfiguration::class, ProductImageStorageTestConfiguration::class)
 @Testcontainers
 class AuthIntegrationTest(
     @Autowired private val mockMvc: MockMvc,

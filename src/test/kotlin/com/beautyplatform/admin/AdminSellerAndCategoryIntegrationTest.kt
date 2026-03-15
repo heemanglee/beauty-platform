@@ -3,8 +3,10 @@ package com.beautyplatform.admin
 import com.beautyplatform.auth.dto.AuthTokenResponse
 import com.beautyplatform.auth.dto.LoginRequest
 import com.beautyplatform.category.CategoryRepository
-import com.beautyplatform.category.CategoryUsageGuard
 import com.beautyplatform.common.security.SecurityTestProbeConfiguration
+import com.beautyplatform.product.ProductImageStorageTestConfiguration
+import com.beautyplatform.product.entity.Product
+import com.beautyplatform.product.repository.ProductRepository
 import com.beautyplatform.seller.AdminCreateSellerRequest
 import com.beautyplatform.user.User
 import com.beautyplatform.user.UserRepository
@@ -17,10 +19,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
-import org.springframework.context.annotation.Primary
-import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.http.MediaType
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -42,20 +41,20 @@ import java.time.Instant
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Import(SecurityTestProbeConfiguration::class, CategoryUsageGuardTestConfiguration::class)
+@Import(SecurityTestProbeConfiguration::class, ProductImageStorageTestConfiguration::class)
 @Testcontainers
 class AdminSellerAndCategoryIntegrationTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper,
     @Autowired private val userRepository: UserRepository,
     @Autowired private val categoryRepository: CategoryRepository,
+    @Autowired private val productRepository: ProductRepository,
     @Autowired private val passwordEncoder: PasswordEncoder,
-    @Autowired private val categoryUsageGuard: TestCategoryUsageGuard,
 ) {
     @BeforeEach
     fun setUp() {
+        productRepository.deleteAll()
         categoryRepository.deleteAll()
-        categoryUsageGuard.reset()
 
         val removableIds =
             userRepository
@@ -310,7 +309,25 @@ class AdminSellerAndCategoryIntegrationTest(
     fun `category update and delete fail when category is marked as in use`() {
         val adminToken = login(email = "admin@beauty.local", password = "AdminPass123!")
         val categoryId = createCategory(adminToken, "Haircare")
-        categoryUsageGuard.markInUse(categoryId)
+        val seller =
+            userRepository.save(
+                User(
+                    role = UserRole.SELLER,
+                    name = "Seller One",
+                    email = "seller.in.use@beauty.local",
+                    passwordHash = passwordEncoder.encode("seller-pass-123"),
+                    phoneNumber = "010-7777-1111",
+                ),
+            )
+        productRepository.save(
+            Product(
+                sellerId = requireNotNull(seller.id),
+                categoryId = categoryId,
+                name = "Linked Product",
+                price = 19_000,
+                stockQuantity = 5,
+            ),
+        )
 
         mockMvc
             .perform(
@@ -446,26 +463,5 @@ class AdminSellerAndCategoryIntegrationTest(
             registry.add("spring.datasource.username", mysql::getUsername)
             registry.add("spring.datasource.password", mysql::getPassword)
         }
-    }
-}
-
-@TestConfiguration
-class CategoryUsageGuardTestConfiguration {
-    @Bean
-    @Primary
-    fun testCategoryUsageGuard(): TestCategoryUsageGuard = TestCategoryUsageGuard()
-}
-
-class TestCategoryUsageGuard : CategoryUsageGuard {
-    private val inUseCategoryIds = mutableSetOf<Long>()
-
-    override fun isCategoryInUse(categoryId: Long): Boolean = inUseCategoryIds.contains(categoryId)
-
-    fun markInUse(categoryId: Long) {
-        inUseCategoryIds += categoryId
-    }
-
-    fun reset() {
-        inUseCategoryIds.clear()
     }
 }

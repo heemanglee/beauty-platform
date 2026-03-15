@@ -4,3 +4,8 @@ app:
       issuer: http://localhost:8080
       secret: test-secret-key-for-beauty-platform-12345
       access-token-ttl: 60m
+  product-images:
+    bucket: test-product-images
+    region: ap-northeast-2
+    public-base-url: https://cdn.test.example.com
+    upload-url-ttl: 10m

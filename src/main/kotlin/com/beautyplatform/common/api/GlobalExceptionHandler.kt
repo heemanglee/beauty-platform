@@ -6,6 +6,10 @@ import com.beautyplatform.auth.exception.PhoneNumberAlreadyExistsException
 import com.beautyplatform.category.CategoryAlreadyExistsException
 import com.beautyplatform.category.CategoryInUseException
 import com.beautyplatform.category.CategoryNotFoundException
+import com.beautyplatform.product.exception.ProductImageStorageException
+import com.beautyplatform.product.exception.ProductImageValidationException
+import com.beautyplatform.product.exception.ProductNotFoundException
+import com.beautyplatform.product.exception.ProductStatusTransitionException
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
@@ -140,6 +144,62 @@ class GlobalExceptionHandler {
                 status = HttpStatus.NOT_FOUND.value(),
                 error = HttpStatus.NOT_FOUND.reasonPhrase,
                 message = exception.message ?: "Category not found",
+                path = request.requestURI,
+            ),
+        )
+
+    @ExceptionHandler(ProductNotFoundException::class)
+    fun handleProductNotFound(
+        exception: ProductNotFoundException,
+        request: HttpServletRequest,
+    ): ResponseEntity<ApiErrorResponse> =
+        ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            ApiErrorResponse(
+                status = HttpStatus.NOT_FOUND.value(),
+                error = HttpStatus.NOT_FOUND.reasonPhrase,
+                message = exception.message ?: "Product not found",
+                path = request.requestURI,
+            ),
+        )
+
+    @ExceptionHandler(ProductStatusTransitionException::class)
+    fun handleProductStatusTransition(
+        exception: ProductStatusTransitionException,
+        request: HttpServletRequest,
+    ): ResponseEntity<ApiErrorResponse> =
+        ResponseEntity.status(HttpStatus.CONFLICT).body(
+            ApiErrorResponse(
+                status = HttpStatus.CONFLICT.value(),
+                error = HttpStatus.CONFLICT.reasonPhrase,
+                message = exception.message ?: "Invalid product status transition",
+                path = request.requestURI,
+            ),
+        )
+
+    @ExceptionHandler(ProductImageValidationException::class)
+    fun handleProductImageValidation(
+        exception: ProductImageValidationException,
+        request: HttpServletRequest,
+    ): ResponseEntity<ApiErrorResponse> =
+        ResponseEntity.badRequest().body(
+            ApiErrorResponse(
+                status = HttpStatus.BAD_REQUEST.value(),
+                error = HttpStatus.BAD_REQUEST.reasonPhrase,
+                message = exception.message ?: "Invalid product image request",
+                path = request.requestURI,
+            ),
+        )
+
+    @ExceptionHandler(ProductImageStorageException::class)
+    fun handleProductImageStorage(
+        exception: ProductImageStorageException,
+        request: HttpServletRequest,
+    ): ResponseEntity<ApiErrorResponse> =
+        ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+            ApiErrorResponse(
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                error = HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase,
+                message = exception.message ?: "Product image storage operation failed",
                 path = request.requestURI,
             ),
         )

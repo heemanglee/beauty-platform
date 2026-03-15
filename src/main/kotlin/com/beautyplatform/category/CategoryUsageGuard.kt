@@ -1,5 +1,6 @@
 package com.beautyplatform.category
 
+import com.beautyplatform.product.repository.ProductRepository
 import org.springframework.stereotype.Component
 
 interface CategoryUsageGuard {
@@ -7,6 +8,8 @@ interface CategoryUsageGuard {
 }
 
 @Component
-class NoopCategoryUsageGuard : CategoryUsageGuard {
-    override fun isCategoryInUse(categoryId: Long): Boolean = false
+class ProductCategoryUsageGuard(
+    private val productRepository: ProductRepository,
+) : CategoryUsageGuard {
+    override fun isCategoryInUse(categoryId: Long): Boolean = productRepository.existsByCategoryId(categoryId)
 }
