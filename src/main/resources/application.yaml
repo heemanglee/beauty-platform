@@ -24,7 +24,7 @@ app:
       secret: ${JWT_SECRET}
       access-token-ttl: ${JWT_ACCESS_TOKEN_TTL:60m}
   product-images:
-    bucket: ${PRODUCT_IMAGES_BUCKET:beauty-platform-product-images}
+    bucket: ${PRODUCT_IMAGES_BUCKET:beauty-platform}
     region: ${AWS_REGION:ap-northeast-2}
     public-base-url: ${PRODUCT_IMAGES_PUBLIC_BASE_URL:https://cdn.example.com}
     upload-url-ttl: ${PRODUCT_IMAGES_UPLOAD_URL_TTL:10m}
