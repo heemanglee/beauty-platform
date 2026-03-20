@@ -1,7 +1,7 @@
 package com.beautyplatform.product.service
 
-import com.beautyplatform.category.CategoryNotFoundException
-import com.beautyplatform.category.CategoryRepository
+import com.beautyplatform.category.exception.CategoryNotFoundException
+import com.beautyplatform.category.repository.CategoryRepository
 import com.beautyplatform.product.dto.CreateProductRequest
 import com.beautyplatform.product.dto.IssueProductImageUploadUrlRequest
 import com.beautyplatform.product.dto.IssueProductImageUploadUrlResponse

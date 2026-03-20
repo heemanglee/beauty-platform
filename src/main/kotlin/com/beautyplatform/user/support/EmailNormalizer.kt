@@ -1,4 +1,4 @@
-package com.beautyplatform.user
+package com.beautyplatform.user.support
 
 import java.util.Locale
 

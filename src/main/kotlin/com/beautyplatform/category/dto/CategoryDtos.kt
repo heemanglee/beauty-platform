@@ -1,4 +1,4 @@
-package com.beautyplatform.category
+package com.beautyplatform.category.dto
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size

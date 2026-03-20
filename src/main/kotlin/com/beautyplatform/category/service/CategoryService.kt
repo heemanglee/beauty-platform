@@ -1,5 +1,14 @@
-package com.beautyplatform.category
+package com.beautyplatform.category.service
 
+import com.beautyplatform.category.dto.CategoryResponse
+import com.beautyplatform.category.dto.CreateCategoryRequest
+import com.beautyplatform.category.dto.UpdateCategoryRequest
+import com.beautyplatform.category.entity.Category
+import com.beautyplatform.category.exception.CategoryAlreadyExistsException
+import com.beautyplatform.category.exception.CategoryInUseException
+import com.beautyplatform.category.exception.CategoryNotFoundException
+import com.beautyplatform.category.repository.CategoryRepository
+import com.beautyplatform.category.support.CategoryUsageGuard
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

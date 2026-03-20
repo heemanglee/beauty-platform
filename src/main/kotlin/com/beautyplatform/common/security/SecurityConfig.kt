@@ -1,6 +1,6 @@
 package com.beautyplatform.common.security
 
-import com.beautyplatform.user.UserRole
+import com.beautyplatform.user.enums.UserRole
 import com.nimbusds.jose.jwk.source.ImmutableSecret
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

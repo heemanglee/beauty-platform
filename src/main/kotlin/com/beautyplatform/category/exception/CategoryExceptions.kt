@@ -1,4 +1,4 @@
-package com.beautyplatform.category
+package com.beautyplatform.category.exception
 
 class CategoryAlreadyExistsException(
     name: String,

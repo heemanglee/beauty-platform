@@ -6,9 +6,9 @@ import com.beautyplatform.auth.dto.LoginRequest
 import com.beautyplatform.auth.dto.SignupRequest
 import com.beautyplatform.common.security.SecurityTestProbeConfiguration
 import com.beautyplatform.product.ProductImageStorageTestConfiguration
-import com.beautyplatform.user.User
-import com.beautyplatform.user.UserRepository
-import com.beautyplatform.user.UserRole
+import com.beautyplatform.user.entity.User
+import com.beautyplatform.user.enums.UserRole
+import com.beautyplatform.user.repository.UserRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

@@ -1,6 +1,6 @@
 package com.beautyplatform.common.security
 
-import com.beautyplatform.user.User
+import com.beautyplatform.user.entity.User
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm
 import org.springframework.security.oauth2.jwt.JwsHeader
 import org.springframework.security.oauth2.jwt.JwtClaimsSet

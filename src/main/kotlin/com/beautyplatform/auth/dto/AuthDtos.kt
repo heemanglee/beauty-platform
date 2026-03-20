@@ -1,6 +1,6 @@
 package com.beautyplatform.auth.dto
 
-import com.beautyplatform.user.UserRole
+import com.beautyplatform.user.enums.UserRole
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size

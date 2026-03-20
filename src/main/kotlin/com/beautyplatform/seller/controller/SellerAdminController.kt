@@ -1,5 +1,8 @@
-package com.beautyplatform.seller
+package com.beautyplatform.seller.controller
 
+import com.beautyplatform.seller.dto.AdminCreateSellerRequest
+import com.beautyplatform.seller.dto.AdminSellerResponse
+import com.beautyplatform.seller.service.SellerService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

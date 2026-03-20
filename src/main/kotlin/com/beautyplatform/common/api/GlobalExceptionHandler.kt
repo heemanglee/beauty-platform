@@ -3,9 +3,9 @@ package com.beautyplatform.common.api
 import com.beautyplatform.auth.exception.EmailAlreadyExistsException
 import com.beautyplatform.auth.exception.InvalidCredentialsException
 import com.beautyplatform.auth.exception.PhoneNumberAlreadyExistsException
-import com.beautyplatform.category.CategoryAlreadyExistsException
-import com.beautyplatform.category.CategoryInUseException
-import com.beautyplatform.category.CategoryNotFoundException
+import com.beautyplatform.category.exception.CategoryAlreadyExistsException
+import com.beautyplatform.category.exception.CategoryInUseException
+import com.beautyplatform.category.exception.CategoryNotFoundException
 import com.beautyplatform.product.exception.ProductImageStorageException
 import com.beautyplatform.product.exception.ProductImageValidationException
 import com.beautyplatform.product.exception.ProductNotFoundException
