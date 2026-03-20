@@ -1,4 +1,4 @@
-package com.beautyplatform.user
+package com.beautyplatform.user.enums
 
 enum class UserRole {
     ADMIN,

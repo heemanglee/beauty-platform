@@ -1,5 +1,6 @@
-package com.beautyplatform.user
+package com.beautyplatform.user.entity
 
+import com.beautyplatform.user.enums.UserRole
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType

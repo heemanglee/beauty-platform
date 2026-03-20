@@ -1,6 +1,10 @@
-package com.beautyplatform.category
+package com.beautyplatform.category.controller
 
 import com.beautyplatform.common.security.requireUserId
+import com.beautyplatform.category.dto.CategoryResponse
+import com.beautyplatform.category.dto.CreateCategoryRequest
+import com.beautyplatform.category.dto.UpdateCategoryRequest
+import com.beautyplatform.category.service.CategoryService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

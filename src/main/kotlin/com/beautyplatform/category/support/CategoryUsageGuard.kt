@@ -1,4 +1,4 @@
-package com.beautyplatform.category
+package com.beautyplatform.category.support
 
 import com.beautyplatform.product.repository.ProductRepository
 import org.springframework.stereotype.Component

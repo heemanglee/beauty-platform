@@ -2,7 +2,7 @@ package com.beautyplatform.product
 
 import com.beautyplatform.auth.dto.AuthTokenResponse
 import com.beautyplatform.auth.dto.LoginRequest
-import com.beautyplatform.category.CategoryRepository
+import com.beautyplatform.category.repository.CategoryRepository
 import com.beautyplatform.common.security.SecurityTestProbeConfiguration
 import com.beautyplatform.product.dto.CreateProductRequest
 import com.beautyplatform.product.dto.IssueProductImageUploadUrlRequest
@@ -11,9 +11,9 @@ import com.beautyplatform.product.dto.ProductImageItemRequest
 import com.beautyplatform.product.entity.ProductImage
 import com.beautyplatform.product.enums.ProductImageType
 import com.beautyplatform.product.repository.ProductRepository
-import com.beautyplatform.user.User
-import com.beautyplatform.user.UserRepository
-import com.beautyplatform.user.UserRole
+import com.beautyplatform.user.entity.User
+import com.beautyplatform.user.enums.UserRole
+import com.beautyplatform.user.repository.UserRepository
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat

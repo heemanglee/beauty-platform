@@ -1,4 +1,4 @@
-package com.beautyplatform.category
+package com.beautyplatform.category.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

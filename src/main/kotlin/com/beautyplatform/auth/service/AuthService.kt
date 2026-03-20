@@ -8,10 +8,10 @@ import com.beautyplatform.auth.exception.EmailAlreadyExistsException
 import com.beautyplatform.auth.exception.InvalidCredentialsException
 import com.beautyplatform.auth.exception.PhoneNumberAlreadyExistsException
 import com.beautyplatform.common.security.JwtTokenService
-import com.beautyplatform.user.EmailNormalizer
-import com.beautyplatform.user.User
-import com.beautyplatform.user.UserRepository
-import com.beautyplatform.user.UserRole
+import com.beautyplatform.user.entity.User
+import com.beautyplatform.user.enums.UserRole
+import com.beautyplatform.user.repository.UserRepository
+import com.beautyplatform.user.support.EmailNormalizer
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
