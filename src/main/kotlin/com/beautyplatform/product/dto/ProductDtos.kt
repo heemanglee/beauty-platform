@@ -132,6 +132,7 @@ data class ProductImageResponse(
 
 data class BuyerProductListResponse(
     val id: Long,
+    val sellerId: Long,
     val categoryId: Long,
     val name: String,
     val price: Long,
@@ -143,6 +144,7 @@ data class BuyerProductListResponse(
 
 data class BuyerProductDetailResponse(
     val id: Long,
+    val sellerId: Long,
     val categoryId: Long,
     val name: String,
     val price: Long,

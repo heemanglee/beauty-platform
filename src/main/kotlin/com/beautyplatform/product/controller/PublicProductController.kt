@@ -17,10 +17,11 @@ class PublicProductController(
 ) {
     @GetMapping
     fun listProducts(
+        @RequestParam(required = false) sellerId: Long?,
         @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) keyword: String?,
         @RequestParam(defaultValue = "LATEST") sort: ProductSortType,
-    ): List<BuyerProductListResponse> = productService.listPublicProducts(categoryId, keyword, sort)
+    ): List<BuyerProductListResponse> = productService.listPublicProducts(sellerId, categoryId, keyword, sort)
 
     @GetMapping("/{productId}")
     fun getProduct(

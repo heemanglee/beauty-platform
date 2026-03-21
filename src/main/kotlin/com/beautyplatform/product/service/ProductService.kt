@@ -163,6 +163,7 @@ class ProductService(
 
     @Transactional(readOnly = true)
     fun listPublicProducts(
+        sellerId: Long?,
         categoryId: Long?,
         keyword: String?,
         sort: ProductSortType,
@@ -170,6 +171,7 @@ class ProductService(
         val products =
             productRepository.findVisibleWithFilters(
                 statuses = VISIBLE_STATUSES,
+                sellerId = sellerId,
                 categoryId = categoryId,
                 keyword = keyword?.trim()?.ifBlank { null },
             )
@@ -403,6 +405,7 @@ private fun Product.toBuyerListResponse(
 ): BuyerProductListResponse =
     BuyerProductListResponse(
         id = requireNotNull(id),
+        sellerId = sellerId,
         categoryId = categoryId,
         name = name,
         price = price,
@@ -424,6 +427,7 @@ private fun Product.toBuyerDetailResponse(
 ): BuyerProductDetailResponse =
     BuyerProductDetailResponse(
         id = requireNotNull(id),
+        sellerId = sellerId,
         categoryId = categoryId,
         name = name,
         price = price,

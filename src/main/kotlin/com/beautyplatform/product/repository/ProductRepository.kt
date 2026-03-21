@@ -60,12 +60,14 @@ interface ProductRepository : JpaRepository<Product, Long> {
         from Product p
         left join fetch p.images
         where p.status in :statuses
+        and (:sellerId is null or p.sellerId = :sellerId)
         and (:categoryId is null or p.categoryId = :categoryId)
         and (:keyword is null or p.name like concat('%', :keyword, '%'))
         """,
     )
     fun findVisibleWithFilters(
         @Param("statuses") statuses: List<ProductStatus>,
+        @Param("sellerId") sellerId: Long?,
         @Param("categoryId") categoryId: Long?,
         @Param("keyword") keyword: String?,
     ): List<Product>

@@ -77,6 +77,7 @@ class BuyerCatalogDiscoveryIntegrationTest(
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].name").value("Glow Serum"))
             .andExpect(jsonPath("$[0].price").value(32_000))
+            .andExpect(jsonPath("$[0].sellerId").isNumber)
             .andExpect(jsonPath("$[0].sellerName").value("Seller"))
             .andExpect(jsonPath("$[0].status").value("ON_SALE"))
             .andExpect(jsonPath("$[0].purchasable").value(true))
@@ -175,6 +176,35 @@ class BuyerCatalogDiscoveryIntegrationTest(
         mockMvc
             .perform(get("/api/public/products/{productId}", productId))
             .andExpect(status().isNotFound)
+    }
+
+    @Test
+    fun `products can be filtered by seller`() {
+        val adminToken = login("admin@beauty.local", "AdminPass123!")
+        val categoryId = createCategory(adminToken, "Skincare")
+
+        createSellerUser("seller.a@beauty.local", "seller-pass-123", "010-8888-0002")
+        createSellerUser("seller.b@beauty.local", "seller-pass-123", "010-8888-0003")
+        val sellerAToken = login("seller.a@beauty.local", "seller-pass-123")
+        val sellerBToken = login("seller.b@beauty.local", "seller-pass-123")
+
+        createSaleReadyProduct(sellerAToken, categoryId, "Seller A Product", 10_000)
+        createSaleReadyProduct(sellerBToken, categoryId, "Seller B Product", 20_000)
+
+        val sellerAId =
+            objectMapper.readTree(
+                mockMvc
+                    .perform(get("/api/public/products"))
+                    .andReturn()
+                    .response.contentAsByteArray,
+            ).first { it["name"].asText() == "Seller A Product" }["sellerId"].asLong()
+
+        mockMvc
+            .perform(get("/api/public/products").param("sellerId", sellerAId.toString()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()").value(1))
+            .andExpect(jsonPath("$[0].name").value("Seller A Product"))
+            .andExpect(jsonPath("$[0].sellerId").value(sellerAId))
     }
 
     @Test
