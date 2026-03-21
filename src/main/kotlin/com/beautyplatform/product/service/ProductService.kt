@@ -2,6 +2,8 @@ package com.beautyplatform.product.service
 
 import com.beautyplatform.category.exception.CategoryNotFoundException
 import com.beautyplatform.category.repository.CategoryRepository
+import com.beautyplatform.product.dto.BuyerProductDetailResponse
+import com.beautyplatform.product.dto.BuyerProductListResponse
 import com.beautyplatform.product.dto.CreateProductRequest
 import com.beautyplatform.product.dto.IssueProductImageUploadUrlRequest
 import com.beautyplatform.product.dto.IssueProductImageUploadUrlResponse
@@ -16,6 +18,7 @@ import com.beautyplatform.product.dto.UpdateProductRequest
 import com.beautyplatform.product.entity.Product
 import com.beautyplatform.product.entity.ProductImage
 import com.beautyplatform.product.enums.ProductImageType
+import com.beautyplatform.product.enums.ProductSortType
 import com.beautyplatform.product.enums.ProductStatus
 import com.beautyplatform.product.exception.ProductImageStorageException
 import com.beautyplatform.product.exception.ProductImageValidationException
@@ -25,6 +28,7 @@ import com.beautyplatform.product.repository.ProductRepository
 import com.beautyplatform.product.storage.IssuedProductImageUpload
 import com.beautyplatform.product.storage.ProductImageStorage
 import com.beautyplatform.product.storage.ProductImageUploadCommand
+import com.beautyplatform.user.repository.UserRepository
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -35,6 +39,7 @@ class ProductService(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val productImageStorage: ProductImageStorage,
+    private val userRepository: UserRepository,
 ) {
     @Transactional
     fun createProduct(
@@ -157,6 +162,47 @@ class ProductService(
     }
 
     @Transactional(readOnly = true)
+    fun listPublicProducts(
+        categoryId: Long?,
+        keyword: String?,
+        sort: ProductSortType,
+    ): List<BuyerProductListResponse> {
+        val products =
+            productRepository.findVisibleWithFilters(
+                statuses = VISIBLE_STATUSES,
+                categoryId = categoryId,
+                keyword = keyword?.trim()?.ifBlank { null },
+            )
+
+        val sorted =
+            when (sort) {
+                ProductSortType.LATEST -> products.sortedByDescending { it.id }
+                ProductSortType.PRICE_ASC -> products.sortedBy { it.price }
+                ProductSortType.PRICE_DESC -> products.sortedByDescending { it.price }
+            }
+
+        val sellerIds = sorted.map { it.sellerId }.toSet()
+        val sellerNames =
+            userRepository
+                .findAllById(sellerIds)
+                .associate { requireNotNull(it.id) to it.name }
+
+        return sorted.map { it.toBuyerListResponse(productImageStorage, sellerNames) }
+    }
+
+    @Transactional(readOnly = true)
+    fun getPublicProduct(productId: Long): BuyerProductDetailResponse {
+        val product =
+            productRepository.findVisibleWithImagesById(productId, VISIBLE_STATUSES)
+                ?: throw ProductNotFoundException(productId)
+
+        val seller =
+            userRepository.findById(product.sellerId).orElseThrow { ProductNotFoundException(productId) }
+
+        return product.toBuyerDetailResponse(productImageStorage, seller.name)
+    }
+
+    @Transactional(readOnly = true)
     fun issueUploadUrl(
         sellerId: Long,
         productId: Long,
@@ -265,6 +311,7 @@ class ProductService(
         private val allowedExtensions = setOf("jpg", "jpeg", "png", "webp")
         private val allowedContentTypes = setOf("image/jpeg", "image/png", "image/webp")
         private const val maxUploadSizeInBytes = 10_485_760L
+        private val VISIBLE_STATUSES = listOf(ProductStatus.ON_SALE, ProductStatus.SOLD_OUT)
     }
 }
 
@@ -348,4 +395,45 @@ private fun IssuedProductImageUpload.toResponse(): IssueProductImageUploadUrlRes
     IssueProductImageUploadUrlResponse(
         s3Key = s3Key,
         uploadUrl = uploadUrl,
+    )
+
+private fun Product.toBuyerListResponse(
+    productImageStorage: ProductImageStorage,
+    sellerNames: Map<Long, String>,
+): BuyerProductListResponse =
+    BuyerProductListResponse(
+        id = requireNotNull(id),
+        categoryId = categoryId,
+        name = name,
+        price = price,
+        sellerName = sellerNames[sellerId] ?: "",
+        status = status,
+        purchasable = status == ProductStatus.ON_SALE,
+        thumbnailImageUrl =
+            images
+                .asSequence()
+                .filter { it.type == ProductImageType.THUMBNAIL }
+                .sortedBy(ProductImage::sortOrder)
+                .map { productImageStorage.resolvePublicUrl(it.s3Key) }
+                .firstOrNull(),
+    )
+
+private fun Product.toBuyerDetailResponse(
+    productImageStorage: ProductImageStorage,
+    sellerName: String,
+): BuyerProductDetailResponse =
+    BuyerProductDetailResponse(
+        id = requireNotNull(id),
+        categoryId = categoryId,
+        name = name,
+        price = price,
+        sellerName = sellerName,
+        status = status,
+        purchasable = status == ProductStatus.ON_SALE,
+        images =
+            ProductImageGroupResponse(
+                thumbnailImages = images.toImageResponses(ProductImageType.THUMBNAIL, productImageStorage),
+                mainImages = images.toImageResponses(ProductImageType.MAIN, productImageStorage),
+                descriptionImages = images.toImageResponses(ProductImageType.DESCRIPTION, productImageStorage),
+            ),
     )
