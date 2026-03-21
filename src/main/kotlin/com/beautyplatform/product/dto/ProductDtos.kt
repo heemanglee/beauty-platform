@@ -129,3 +129,27 @@ data class ProductImageResponse(
     val sortOrder: Int,
     val url: String,
 )
+
+data class BuyerProductListResponse(
+    val id: Long,
+    val sellerId: Long,
+    val categoryId: Long,
+    val name: String,
+    val price: Long,
+    val sellerName: String,
+    val status: ProductStatus,
+    val purchasable: Boolean,
+    val thumbnailImageUrl: String?,
+)
+
+data class BuyerProductDetailResponse(
+    val id: Long,
+    val sellerId: Long,
+    val categoryId: Long,
+    val name: String,
+    val price: Long,
+    val sellerName: String,
+    val status: ProductStatus,
+    val purchasable: Boolean,
+    val images: ProductImageGroupResponse,
+)
